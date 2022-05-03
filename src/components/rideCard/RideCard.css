@@ -1,0 +1,36 @@
+.rideInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.rideName {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+    font-family: 'Paytone One', sans-serif;
+}
+
+.rideStatus {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.waitTime {
+    font-size: 20px;
+}
+
+.rideIcon {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.rideCard {
+    margin: 10px;
+}
+
+.card {
+    height: 250px;
+}

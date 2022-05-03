@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Paytone+One&display=swap');
+
+.innerContainer {
+    display: flex;
+}
+
+.outerContainer {
+    padding: 20px;
+    font-family: 'Patrick Hand', cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mapContainer {
+    width: 800px;
+    padding-top: 25px;
+}
+
+.showHideButton {
+    padding: 25px;
+}
+
+.mouseTrackerLogo {
+    width: 275px;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.land {
+    background-color: #a8dadc;
+    padding: 15px;
+}
+
+.land:first-child {
+    border-radius: 10px 10px 0px 0px;
+    margin-top: 25px;
+}
+
+.land:last-child {
+    border-radius: 0px 0px 10px 10px;
+}
+.land:nth-of-type(even){
+    background-color: #dcdcdc;
+}
+
+.landName {
+    font-size: 26px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 20px;
+    font-family: 'Paytone One', sans-serif;
+}
+.landName:first-child {
+    margin-top: 0px;
+}
+
+.rideSection {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: left;
+    flex-wrap: wrap;
+}
