@@ -1,48 +1,59 @@
-import React, { useState } from 'react';
-import { GoogleMap as GoogleMapReact, LoadScript, MarkerClusterer } from '@react-google-maps/api';
-import Marker from './Marker';
+import React, { useState } from "react";
+import {
+  GoogleMap as GoogleMapReact,
+  LoadScript,
+  MarkerClusterer,
+} from "@react-google-maps/api";
+import Marker from "./Marker";
+import markers from "./DisneyMarkers";
 
+const GoogleMap = ({
+  displayedMarker,
+  latitude,
+  longitude,
+  zoom = 17,
+}) => {
+  const [showMap, setShowMap] = useState(false);
 
-const GoogleMap = ({ displayedMarker, markers, onDisplayedMarkerClick, latitude, longitude, zoom = 17, classes }) => {
   const mapProps = {
     center: {
       // if we have a marker to display, center the map on that, otherwise center on location
-      lat: displayedMarker ? parseFloat(displayedMarker.latitude) : latitude,
-      lng: displayedMarker ? parseFloat(displayedMarker.longitude) : longitude
+      lat: displayedMarker ? markers[displayedMarker]?.latitude : latitude,
+      lng: displayedMarker ? markers[displayedMarker]?.longitude: longitude
     },
-    zoom
+    zoom: displayedMarker ? 20 : zoom,
   };
 
   const containerStyle = {
-    width: '100%',
-    height: '641px'
+    width: "100%",
+    height: "300px",
   };
 
-  // configures map so street view and map type options are hidden and points of interest are hidden to 
+  // configures map so street view and map type options are hidden and points of interest are hidden to
   // remove map clutter
   const mapOptions = {
     streetViewControl: false,
     mapTypeControl: false,
     styles: [
       {
-        featureType: 'poi',
-        elementType: 'labels',
+        featureType: "poi",
+        elementType: "labels",
         stylers: [
           {
-            visibility: 'off'
-          }
-        ]
+            visibility: "off",
+          },
+        ],
       },
       {
-        featureType: 'transit',
-        elementType: 'all',
+        featureType: "transit",
+        elementType: "all",
         stylers: [
           {
-            visibility: 'off'
-          }
-        ]
-      }
-    ]
+            visibility: "off",
+          },
+        ],
+      },
+    ],
   };
 
   const [displayMarker, setDisplayMarker] = useState(null);
@@ -52,40 +63,34 @@ const GoogleMap = ({ displayedMarker, markers, onDisplayedMarkerClick, latitude,
     setDisplayMarker(marker);
   };
 
-  // sets displayMarker here and in parent so pin and info window will be centered when marker is clicked
-  const onClick = (displayMarker, marker) => {
-    setDisplayMarker(displayMarker);
-    onDisplayedMarkerClick(marker)
-  }
-
   // renders each marker on map when event is clicked
   const renderMarkers = () => {
-    return markers.map(marker => {
-      return (
-        <Marker
-          key={marker.eventId}
-          displayedMarker={displayedMarker}
-          onLoad={onLoad}
-          marker={marker}
-          displayMarker={displayMarker}
-          onDisplayedMarkerClick={onClick}
-        />
-      );
-    });
+    return Object.entries(markers).map(([key, value]) => {
+      return <Marker marker={value} displayMarker={displayMarker}  onLoad={onLoad}/>
+     });
+  };
+
+  const displayMap = () => {
+    return (
+      <GoogleMapReact
+        options={mapOptions}
+        center={mapProps.center}
+        zoom={mapProps.zoom}
+        mapContainerStyle={containerStyle}
+      >
+        {/* Clusterer is needed to display mulitple markers on map*/}
+        <MarkerClusterer>{() => renderMarkers()}</MarkerClusterer>
+      </GoogleMapReact>
+    );
   };
 
   return (
     <LoadScript googleMapsApiKey="AIzaSyBoc9XBo-e7KY6PHtDBCI7yqwPID56ILmk">
-      <div>
-        <GoogleMapReact
-          options={mapOptions}
-          center={mapProps.center}
-          zoom={mapProps.zoom}
-          mapContainerStyle={containerStyle}
-        >
-          {/* Clusterer is needed to display mulitple markers on map*/}
-          {/*<MarkerClusterer>{() => renderMarkers()}</MarkerClusterer>*/}
-        </GoogleMapReact>
+      {showMap && <div className="mapContainer">{displayMap()}</div>}
+      <div className="showHideButton">
+        <button onClick={() => setShowMap(!showMap)}>
+          {`${showMap ? "Hide" : "Show"} Map`}
+        </button>
       </div>
     </LoadScript>
   );

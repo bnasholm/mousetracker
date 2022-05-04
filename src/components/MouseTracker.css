@@ -13,11 +13,6 @@
     align-items: center;
 }
 
-.mapContainer {
-    width: 800px;
-    padding-top: 25px;
-}
-
 .showHideButton {
     padding: 25px;
 }
@@ -59,7 +54,23 @@
 .rideSection {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
-    justify-content: left;
+    align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
+}
+
+button {
+    padding: 5px;
+    width: 100px;
+    font-size: 20px;
+    font-family: 'Patrick Hand', cursive;
+    border: 1px solid #86acae;
+    border-radius: 10px;
+    background-color: #a8dadc;
+}
+
+.mapContainer {
+    width: 500px;
+    height: 300px;
+    padding-top: 25px;
 }

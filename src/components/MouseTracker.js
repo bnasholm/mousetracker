@@ -14,7 +14,7 @@ const MouseTracker = () => {
     causeOfError: null,
   };
   const [state, setState] = useState(initialState);
-  const [showMap, setShowMap] = useState(false);
+  const [displayedRide, setDisplayedRide] = useState(null);
 
   const loadDisneylandData = async () => {
     try {
@@ -62,7 +62,7 @@ const MouseTracker = () => {
               <div className="landName">{name}: </div>
               <div className="rideSection">
                 {rides.map((ride) => {
-                  return <RideCard ride={ride} />;
+                  return <RideCard ride={ride} handleButtonClick={(id)=>setDisplayedRide(id)}/>;
                 })}
               </div>
             </div>
@@ -73,18 +73,13 @@ const MouseTracker = () => {
   };
 
   const displayMap = () => {
-    return <GoogleMap latitude={33.8121} longitude={-117.919} />;
+    return <GoogleMap latitude={33.8121} longitude={-117.919} displayedMarker={displayedRide}/>;
   };
 
   return (
     <div className="outerContainer">
         <img src={logo} alt="Mouse Tracker logo" className="mouseTrackerLogo"/>
-      {/*{showMap && <div className="mapContainer">{displayMap()}</div>}
-      <div className="showHideButton">
-        <Button primary onClick={() => setShowMap(!showMap)}>
-          {`${showMap ? 'Hide' : 'Show'} Map`}
-        </Button>
-      </div> */}
+        {displayMap()}
       <div className="innerContainer">{displayDisneylandData()}</div>
     </div>
   );
