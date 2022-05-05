@@ -1,8 +1,8 @@
 const markers = {
   0: {
     id: "0",
-    latitude: 33.8121,
-    longitude: -117.919,
+    latitude: 33.81210267630164,
+    longitude:  -117.91897211614375,
     rideName: "Disneyland Center",
   },
   287: {

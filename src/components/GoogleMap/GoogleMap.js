@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   GoogleMap as GoogleMapReact,
   LoadScript,
@@ -12,16 +12,24 @@ const GoogleMap = ({
   latitude,
   longitude,
   onDisplayMarkerLoad,
+  allRides,
+  onDisplayedMarkerClick,
   zoom = 17,
 }) => {
-
   const [showMap, setShowMap] = useState(false);
+
+  useEffect(() => {
+    // wait for markers to be loaded
+    setTimeout(() => {
+      setShowMap(true);
+    }, 250);
+  }, []);
 
   const mapProps = {
     center: {
       // if we have a marker to display, center the map on that, otherwise center on location
       lat: displayedMarker ? displayedMarker[0].latitude : latitude,
-      lng: displayedMarker ? displayedMarker[0].longitude : longitude
+      lng: displayedMarker ? displayedMarker[0].longitude : longitude,
     },
     zoom: displayedMarker ? 20 : zoom,
   };
@@ -66,8 +74,16 @@ const GoogleMap = ({
   // renders each marker on map when event is clicked
   const renderMarkers = () => {
     return Object.entries(markers).map(([key, value]) => {
-      return <Marker marker={value} displayedMarker={displayedMarker}  onLoad={onLoad}/>
-     });
+      return (
+        <Marker
+          marker={value}
+          onDisplayedMarkerClick={onDisplayedMarkerClick}
+          displayedMarker={displayedMarker}
+          onLoad={onLoad}
+          allRides={allRides}
+        />
+      );
+    });
   };
 
   const displayMap = () => {

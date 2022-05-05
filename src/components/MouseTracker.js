@@ -16,7 +16,8 @@ const MouseTracker = () => {
   };
   const [state, setState] = useState(initialState);
   const [displayedRide, setDisplayedRide] = useState(null);
-  const allMarkers = [];
+  const [allMarkers] = useState([]);
+  const [allRides] = useState([]);
 
   const loadDisneylandData = async () => {
     try {
@@ -52,8 +53,10 @@ const MouseTracker = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleButtonClick = (id) => {
-      setDisplayedRide([markers[id], allMarkers[id]]);
+  const handleButtonClick = (id, wait_time, is_open, last_updated) => {
+    const status = {wait_time, is_open, last_updated}
+    setDisplayedRide([markers[id], allMarkers[id], status]);
+    window.scrollTo(0, 0);
   };
 
   const displayDisneylandData = () => {
@@ -68,8 +71,10 @@ const MouseTracker = () => {
               <div className="landName">{name}: </div>
               <div className="rideSection">
                 {rides.map((ride) => {
+                    allRides[ride.id] = ride;
                   return (
                     <RideCard
+                      key={ride.id}
                       ride={ride}
                       handleButtonClick={handleButtonClick}
                     />
@@ -82,6 +87,11 @@ const MouseTracker = () => {
       </div>
     );
   };
+
+  const handleMarkerClick = (googleMarker, marker) => {
+      console.log(googleMarker);
+      console.log(marker);
+  } 
 
   const handleDisplayMarkerLoad = (id, marker) => {
     // need to update a variable with all google markers so
@@ -97,6 +107,8 @@ const MouseTracker = () => {
         longitude={-117.919}
         displayedMarker={displayedRide}
         onDisplayMarkerLoad={handleDisplayMarkerLoad}
+        onDisplayedMarkerClick={handleMarkerClick}
+        allRides={allRides}
       />
     );
   };

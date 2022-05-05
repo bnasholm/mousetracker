@@ -17,7 +17,7 @@ const RideCard = ({ ride, handleButtonClick }) => {
   );
 
   const onButtonClick = () => {
-    handleButtonClick(id);
+    handleButtonClick(id, wait_time, last_updated);
   };
 
   return (
