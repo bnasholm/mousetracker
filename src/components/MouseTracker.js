@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import RideCard from "./rideCard/RideCard";
 import GoogleMap from "./GoogleMap/GoogleMap";
 import logo from "./mouseTrackerLogo.png";
+import markers from "./GoogleMap/DisneyMarkers";
 import "./MouseTracker.css";
 
 const MouseTracker = () => {
@@ -15,6 +16,7 @@ const MouseTracker = () => {
   };
   const [state, setState] = useState(initialState);
   const [displayedRide, setDisplayedRide] = useState(null);
+  const allMarkers = [];
 
   const loadDisneylandData = async () => {
     try {
@@ -50,6 +52,10 @@ const MouseTracker = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleButtonClick = (id) => {
+      setDisplayedRide([markers[id], allMarkers[id]]);
+  };
+
   const displayDisneylandData = () => {
     if (!state.data.disneyland || !state.data.californiaAdventure) return;
     const disneylandLands = state.data.disneyland.lands;
@@ -62,7 +68,12 @@ const MouseTracker = () => {
               <div className="landName">{name}: </div>
               <div className="rideSection">
                 {rides.map((ride) => {
-                  return <RideCard ride={ride} handleButtonClick={(id)=>setDisplayedRide(id)}/>;
+                  return (
+                    <RideCard
+                      ride={ride}
+                      handleButtonClick={handleButtonClick}
+                    />
+                  );
                 })}
               </div>
             </div>
@@ -72,14 +83,28 @@ const MouseTracker = () => {
     );
   };
 
+  const handleDisplayMarkerLoad = (id, marker) => {
+    // need to update a variable with all google markers so
+    // we can reference the one that is clicked by button
+    // to send back to map component to display info window
+    allMarkers[id] = marker;
+  };
+
   const displayMap = () => {
-    return <GoogleMap latitude={33.8121} longitude={-117.919} displayedMarker={displayedRide}/>;
+    return (
+      <GoogleMap
+        latitude={33.8121}
+        longitude={-117.919}
+        displayedMarker={displayedRide}
+        onDisplayMarkerLoad={handleDisplayMarkerLoad}
+      />
+    );
   };
 
   return (
     <div className="outerContainer">
-        <img src={logo} alt="Mouse Tracker logo" className="mouseTrackerLogo"/>
-        {displayMap()}
+      <img src={logo} alt="Mouse Tracker logo" className="mouseTrackerLogo" />
+      {displayMap()}
       <div className="innerContainer">{displayDisneylandData()}</div>
     </div>
   );

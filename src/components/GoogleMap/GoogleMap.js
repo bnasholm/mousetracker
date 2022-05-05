@@ -11,15 +11,17 @@ const GoogleMap = ({
   displayedMarker,
   latitude,
   longitude,
+  onDisplayMarkerLoad,
   zoom = 17,
 }) => {
+
   const [showMap, setShowMap] = useState(false);
 
   const mapProps = {
     center: {
       // if we have a marker to display, center the map on that, otherwise center on location
-      lat: displayedMarker ? markers[displayedMarker]?.latitude : latitude,
-      lng: displayedMarker ? markers[displayedMarker]?.longitude: longitude
+      lat: displayedMarker ? displayedMarker[0].latitude : latitude,
+      lng: displayedMarker ? displayedMarker[0].longitude : longitude
     },
     zoom: displayedMarker ? 20 : zoom,
   };
@@ -56,17 +58,15 @@ const GoogleMap = ({
     ],
   };
 
-  const [displayMarker, setDisplayMarker] = useState(null);
-
   // sets displayMarker so map & pins/info window will be rerendered when event is clicked
-  const onLoad = marker => {
-    setDisplayMarker(marker);
+  const onLoad = (rideId, googleMarker) => {
+    onDisplayMarkerLoad(rideId, googleMarker);
   };
 
   // renders each marker on map when event is clicked
   const renderMarkers = () => {
     return Object.entries(markers).map(([key, value]) => {
-      return <Marker marker={value} displayMarker={displayMarker}  onLoad={onLoad}/>
+      return <Marker marker={value} displayedMarker={displayedMarker}  onLoad={onLoad}/>
      });
   };
 
