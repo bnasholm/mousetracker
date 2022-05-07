@@ -1,7 +1,15 @@
+const path = require('path');
 const express = require("express");
-const axios = require("axios");
+const publicPath = path.join(__dirname, '..', 'public');
 const PORT = process.env.PORT || 3001;
+const axios = require("axios");
 const app = express();
+
+app.use(express.static(publicPath));
+
+app.get('*', (req,res) => {
+  res.sendFile(path.join(publicPath, 'index.html'))
+});
 
 app.get("/api/waittimes/:id", async (req, res) => {
   const parkId = req.params.id;
@@ -17,17 +25,7 @@ app.get("/api/waittimes/:id", async (req, res) => {
   }
 });
 
-if (process.env.NODE_ENV === "production") {
-  // Exprees will serve up production assets
-  app.use(express.static("./build"));
-
-  // Express serve up index.html file if it doesn't recognize route
-  const path = require("path");
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, ".", "build", "index.html"));
-  });
-} else {
   app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
   });
-}
+
