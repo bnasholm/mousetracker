@@ -20,7 +20,6 @@ const grayIcon = require("./map-icons/markerIconGray.png");
 const greenIcon = require("./map-icons/markerIconGreen.png");
 const yellowIcon = require("./map-icons/markerIconYellow.png");
 const redIcon = require("./map-icons/markerIconRed.png");
-const noIcon = require("./map-icons/noIcon.png");
 
 const Marker = ({
   marker,
@@ -70,9 +69,10 @@ const Marker = ({
       const is_open = ride.is_open;
       if (!is_open) return grayIcon;
       else if (wait_time < 30) return greenIcon;
-      else if (wait_time >= 30 && wait_time < 60) return yellowIcon;
-      else if (wait_time >= 60) return redIcon;
+      else if (wait_time >= 30 && wait_time <= 60) return yellowIcon;
+      else if (wait_time > 60) return redIcon;
     }
+    console.log(id);
     return blueIcon;
   };
 

@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   GoogleMap as GoogleMapReact,
   LoadScript,
   MarkerClusterer,
 } from "@react-google-maps/api";
 import Marker from "./Marker";
+import Legend from "./Legend";
 import markers from "./DisneyMarkers";
+import "./GoogleMap.css";
 
 const GoogleMap = ({
   displayedMarker,
@@ -16,7 +18,23 @@ const GoogleMap = ({
   onDisplayedMarkerClick,
   zoom = 17,
 }) => {
+  const [isMobile, setIsMobile] = useState(false);
   const [showMap, setShowMap] = useState(false);
+
+  const handleWindowResize = useCallback(() => {
+    const windowWidth = window.screen.width;
+    if (windowWidth > 600) setIsMobile(false);
+    else setIsMobile(true);
+  });
+
+  useEffect(() => {
+    handleWindowResize();
+    window.addEventListener('resize', handleWindowResize);
+    // remove the listner on unmount
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   useEffect(() => {
     // wait for markers to be loaded
@@ -24,6 +42,7 @@ const GoogleMap = ({
       setShowMap(true);
     }, 250);
   }, []);
+
 
   const mapProps = {
     center: {
@@ -36,7 +55,7 @@ const GoogleMap = ({
 
   const containerStyle = {
     width: "100%",
-    height: "300px",
+    height: "100%",
   };
 
   // configures map so street view and map type options are hidden and points of interest are hidden to
@@ -96,6 +115,7 @@ const GoogleMap = ({
       >
         {/* Clusterer is needed to display mulitple markers on map*/}
         <MarkerClusterer>{() => renderMarkers()}</MarkerClusterer>
+        {!isMobile && <Legend />}s
       </GoogleMapReact>
     );
   };

@@ -18,6 +18,9 @@ const MouseTracker = () => {
   const [displayedRide, setDisplayedRide] = useState(null);
   const [allMarkers] = useState([]);
   const [allRides] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+
+  const infoIcon = require("./info.png");
 
   const loadDisneylandData = async () => {
     try {
@@ -54,7 +57,7 @@ const MouseTracker = () => {
   }, []);
 
   const handleButtonClick = (id, wait_time, is_open, last_updated) => {
-    const status = {wait_time, is_open, last_updated}
+    const status = { wait_time, is_open, last_updated };
     setDisplayedRide([markers[id], allMarkers[id], status]);
     window.scrollTo(0, 0);
   };
@@ -71,7 +74,7 @@ const MouseTracker = () => {
               <div className="landName">{name}: </div>
               <div className="rideSection">
                 {rides.map((ride) => {
-                    allRides[ride.id] = ride;
+                  allRides[ride.id] = ride;
                   return (
                     <RideCard
                       key={ride.id}
@@ -89,9 +92,18 @@ const MouseTracker = () => {
   };
 
   const handleMarkerClick = (googleMarker, marker) => {
-      console.log(googleMarker);
-      console.log(marker);
-  } 
+    if (marker.id === "0" || marker.id==="679") {
+      setDisplayedRide([marker, googleMarker, null]);
+    } else {
+      const { wait_time, is_open, last_updated } = allRides[marker.id];
+      const newRide = [
+        marker,
+        googleMarker,
+        { wait_time, is_open, last_updated },
+      ];
+      setDisplayedRide(newRide);
+    }
+  };
 
   const handleDisplayMarkerLoad = (id, marker) => {
     // need to update a variable with all google markers so
@@ -113,9 +125,37 @@ const MouseTracker = () => {
     );
   };
 
+  const displayModal = () => {
+    return (
+      <div className="modal">
+        <div className="modalContent">
+          <span class="close" onClick={() => setOpenModal(false)}>
+            &times;
+          </span>
+          <div className="modalText">
+              <h2>About Mouse Tracker</h2>
+              <p>Mouse Tracker is a single-page web application built on a NodeJS backend and React frontend that pulls in Disneyland ride wait time data from a public API provided by QueueTimes.com. Rides are displayed on a map using Google Maps API.</p>
+              <p>This application was built by <a href="http://www.breannanasholm.com/" target="_blank" rel="noopener noreferrer">Breanna Nasholm</a>.</p>
+              <h2>Credits</h2>
+              <p><a href="https://queue-times.com/" target="_blank" rel="noopener noreferrer">QueueTimes.com</a> - Wait Times API</p>
+              <p><a href="https://www.flaticon.com/" target="_blank" rel="noopener noreferrer">FlatIcon</a> - Icons</p>
+              <p><a href="https://www.disney.com/" target="_blank" rel="noopener noreferrer">Disney</a> - Ride Images and Names</p>
+        </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="outerContainer">
       <img src={logo} alt="Mouse Tracker logo" className="mouseTrackerLogo" />
+      <img
+        src={infoIcon}
+        alt="Info"
+        className="infoIcon"
+        onClick={() => setOpenModal(true)}
+      />
+      {openModal && displayModal()}
       {displayMap()}
       <div className="innerContainer">{displayDisneylandData()}</div>
     </div>

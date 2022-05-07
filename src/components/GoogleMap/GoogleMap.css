@@ -1,0 +1,40 @@
+.mapContainer {
+    max-width: 500px;
+    max-height: 300px;
+    width: 80%;
+    height: 300px;
+    padding-top: 25px;
+}
+
+.legend {
+    position: absolute;
+    left: 10px;
+    bottom: 30px;
+    background-color: #fff;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 5px;
+    border: 1px solid #dcdcdc;
+    padding: 10px
+}
+
+.legendIcon {
+    margin-right: 10px;
+    display: flex;
+    justify-content: left;
+    width: 12px;
+    height: 16px;
+    vertical-align: middle
+  }
+
+.legendLine {
+    display: flex;
+    padding-bottom: 0px;
+    font-size: 10px;
+}
+
+.legendLine:last-child {
+      padding-bottom: 0px;
+} 
