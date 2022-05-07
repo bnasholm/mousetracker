@@ -3,6 +3,11 @@ const axios = require("axios");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+
+app.get('/', async (req, res) => {
+    res.status(200).send("hello???")  
+}); 
+
 app.get("/api/waittimes/:id", async (req, res) => {
   const parkId = req.params.id;
   try {
