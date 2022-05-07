@@ -72,7 +72,6 @@ const Marker = ({
       else if (wait_time >= 30 && wait_time <= 60) return yellowIcon;
       else if (wait_time > 60) return redIcon;
     }
-    console.log(id);
     return blueIcon;
   };
 

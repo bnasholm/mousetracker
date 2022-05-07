@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import MouseTracker from './components/MouseTracker';
 
