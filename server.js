@@ -1,15 +1,10 @@
 const path = require('path');
 const express = require("express");
-const publicPath = path.join(__dirname, '.', 'build');
 const PORT = process.env.PORT || 3001;
 const axios = require("axios");
 const app = express();
 
-app.use(express.static(publicPath));
-
-app.get('*', (req,res) => {
-  res.sendFile(path.join(publicPath, 'index.html'))
-});
+app.use(express.static(path.resolve(__dirname, "./build")));
 
 app.get("/api/waittimes/:id", async (req, res) => {
   const parkId = req.params.id;
